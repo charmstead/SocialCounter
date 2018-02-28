@@ -20,7 +20,7 @@ const snapchatFollowersCount = 15772500;
 router.get('/', function (req, res, next) {
 
 
-  res.render('index', { title: 'Welcome to socialCounter' });
+  res.render('index', { title: 'Welcome to socialCounter',email:'tomideso@gmail.com' });
 });
 
 
