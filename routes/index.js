@@ -70,20 +70,22 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
 
   //RESULT WILL BE COMPUTED HERE
   var result = {
-    youtubeChannelViews: '',
-    instagramFollowers: '',
-    twitterFollowers: '',
-    soundcloud: '',
-    facebookFanCount: ''
+    // youtubeChannelViews: 0,
+    // instagramFollowers: 0,
+    // twitterFollowers: 0,
+    // soundcloud: 0,
+    // facebookFanCount: 0
   };
 
+  //commented out so that platform not included in the req body is not sent out at all as zero
+
   var popularity = {
-    youtube: 0,
-    instagram: 0,
-    twitter: 0,
-    soundcloud: 0,
-    facebook: 0,
-    overall: 0
+    // youtube: 0,
+    // instagram: 0,
+    // twitter: 0,
+    // soundcloud: 0,
+    // facebook: 0,
+    // overall: 0
   };
 
   count = 0;
@@ -105,11 +107,12 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
           resolve();
         }
       }
+      else{ reject()}
 
 
-    }
+    }else{ reject()}
 
-  });
+  }).catch(()=>{ });
 
   let promise2 = new Promise((resolve, reject) => {
 
@@ -127,11 +130,11 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
           console.log("were are here");
           resolve();
         }
-      }
+      }else{ reject()}
 
-    }
+    }else{ reject()}
 
-  });
+  }).catch(()=>{ });;
 
 
   let promise3 = new Promise((resolve, reject) => {
@@ -147,12 +150,12 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
         if (popularity.twitter) {
             resolve();
         }
-      }
+      }else{ reject()}
 
 
-    }
+    }else{ reject()}
 
-  });
+  }).catch(()=>{ });;
 
 
   let promise4 = new Promise((resolve, reject) => {
@@ -170,12 +173,12 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
          
           resolve();
         }
-      }
+      }else{ reject()}
 
 
-    }
+    }else{ reject()}
 
-  });
+  }).catch(()=>{ });;
 
 
   let promise5 = new Promise((resolve, reject) => {
@@ -193,16 +196,16 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
           
           resolve();
         }
-      }
+      }else{ reject()}
 
-    }
+    }else{ reject()}
 
-  });
+  }).catch(()=>{ });
 
   Promise.all([promise1, promise2, promise3, promise4, promise5])
     .then(() => {
 
-      popularity.overall = (popularity.facebook + popularity.instagram + popularity.soundcloud + popularity.twitter + popularity.youtube)/count;
+      popularity.overall = (Object.values(popularity).reduce((a,b) => a+b, 0))/count;
       popularity.overall= Number(popularity.overall.toFixed(2))+"%";
      
       console.log("we are done " + JSON.stringify(popularity));

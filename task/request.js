@@ -6,7 +6,7 @@ const config = require('../auth').config;
 const getChannelViews = (appName) => {
 
     //the appName is also known as the channel Name
-    const youTubeName = config.youtube.url.replace('placeholder', appName);
+    const youTubeName = appName ?config.youtube.url.replace('placeholder', appName) :null;
 
     console.log("youtube url" + youTubeName);
 
@@ -21,7 +21,7 @@ const getChannelViews = (appName) => {
 //for instagram
 const instagramCount = (userName) => {
 
-    const url = config.instagram.replace('placeholder', userName);
+    const url = userName ?config.instagram.replace('placeholder', userName):null;
 
     console.log("instagram url is" + url);
 
@@ -36,7 +36,8 @@ const instagramCount = (userName) => {
 //for twitter
 const twitterCount = (userName) => {
 
-    const url = config.twitter.replace('twitter_username', userName);
+    
+    const url = userName ? config.twitter.replace('twitter_username', userName):null;
 
     console.log("twitter url is" + url);
 
@@ -51,7 +52,7 @@ const twitterCount = (userName) => {
 //for soundcloud
 const soundcloudCount = (userName) => {
 
-    const url = config.soundcloud.replace('username', userName);
+    const url = userName ?config.soundcloud.replace('username', userName):null;
 
     console.log("soundcloud url is" + url);
 
@@ -66,7 +67,7 @@ const soundcloudCount = (userName) => {
 //for Facebook
 const facebookCount = (userName) => {
 
-    const url = config.facebook.replace('fanPageName', userName);
+    const url = userName ? config.facebook.replace('fanPageName', userName):null;
 
     console.log("facebook page url is" + url);
 
