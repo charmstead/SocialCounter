@@ -118,8 +118,8 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
 
     if (res2.data) {
 
-      result.instagramFollowers = res2.data.user.followed_by.count;
-      console.log(res2.data.user.followed_by);
+      result.instagramFollowers = res2.data.graphql.user.edge_followed_by.count;
+      console.log(res2.data.graphql.user.edge_followed_by.count);
 
       if (result.instagramFollowers > 0) {
         count++;
@@ -127,14 +127,14 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
         popularity.instagram = Number((ig * 100).toFixed(2));
 
         if (popularity.instagram) {
-          console.log("were are here");
+          console.log("Instagram is alive...");
           resolve();
         }
       }else{ reject()}
 
     }else{ reject()}
 
-  }).catch(()=>{ });;
+  }).catch(()=>{ });
 
 
   let promise3 = new Promise((resolve, reject) => {
