@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 const client = require('../task/request');
 const axios = require('axios');
+const Proxy = require('../model/proxySchema')
 
-
+const options = require('../config')
 
 
 //popularity stats
@@ -19,8 +20,67 @@ const snapchatFollowersCount = 15772500;
 /* GET home page. */
 router.get('/', function (req, res, next) {
 
+  res.render('index', { title: 'Welcome to socialCounter', email: 'tomideso@gmail.com' });
+});
 
-  res.render('index', { title: 'Welcome to socialCounter',email:'tomideso@gmail.com' });
+
+/* POST new proxy */
+router.post('/proxy', function (req, res, next) {
+  let proxies = req.body.proxies;
+
+
+  try {
+
+    Proxy.insertMany(proxies, (err, result) => {
+
+      res.send("Successfully added proxies")
+    })
+  }
+  catch (e) {
+    return res.send("Error occurred")
+  }
+
+});
+
+router.get('/all', function (req, res, next) {
+  let proxies = req.body.proxies;
+
+  Proxy.find((err,prxy)=>{
+
+    prxy.map((p,i)=>{
+
+      setTimeout(() => {
+
+          let proxy_address = p.proxy.split(":");
+          let proxy = { host: proxy_address[0], port: proxy_address[1] }
+          options.proxy=proxy;
+          axios(options)
+          .then(res => {
+              console.log(res.statusCode)
+          })
+          .catch(error => {
+              console.log("error");
+             
+          });
+
+      },i*1500)
+  })
+
+      res.send(proxy);
+  })
+
+});
+
+
+/* Get proxy not used */
+router.get('/proxy', function (req, res, next) {
+  let proxies = req.body.proxies;
+
+  Proxy.find({ 'used': false },(err,proxy)=>{
+
+      res.send(proxy);
+  })
+
 });
 
 
@@ -48,11 +108,11 @@ router.post('/socialcount', function (req, res, next) {
   ]).then(axios.spread((res1, res2, res3, res4, res5) => {
 
     //the response will be sent as json to the requester
-    processResponse(res1, res2, res3, res4, res5,(result)=>{
+    processResponse(res1, res2, res3, res4, res5, (result) => {
 
       return res.json(result);
     });
-    
+
 
   })).catch((err1) => {
 
@@ -103,16 +163,16 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
         const urate = (result.youtubeChannelViews / youtubeViews);
         popularity.youtube = Number((urate * 100).toFixed(2));
         if (popularity.youtube) {
-          
+
           resolve();
         }
       }
-      else{ reject()}
+      else { reject() }
 
 
-    }else{ reject()}
+    } else { reject() }
 
-  }).catch(()=>{ });
+  }).catch(() => { });
 
   let promise2 = new Promise((resolve, reject) => {
 
@@ -130,11 +190,11 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
           console.log("Instagram is alive...");
           resolve();
         }
-      }else{ reject()}
+      } else { reject() }
 
-    }else{ reject()}
+    } else { reject() }
 
-  }).catch(()=>{ });
+  }).catch(() => { });
 
 
   let promise3 = new Promise((resolve, reject) => {
@@ -148,14 +208,14 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
         popularity.twitter = Number((twit * 100).toFixed(2));
 
         if (popularity.twitter) {
-            resolve();
+          resolve();
         }
-      }else{ reject()}
+      } else { reject() }
 
 
-    }else{ reject()}
+    } else { reject() }
 
-  }).catch(()=>{ });;
+  }).catch(() => { });;
 
 
   let promise4 = new Promise((resolve, reject) => {
@@ -170,15 +230,15 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
         popularity.soundcloud = Number((sc * 100).toFixed(2));
 
         if (popularity.soundcloud) {
-         
+
           resolve();
         }
-      }else{ reject()}
+      } else { reject() }
 
 
-    }else{ reject()}
+    } else { reject() }
 
-  }).catch(()=>{ });;
+  }).catch(() => { });;
 
 
   let promise5 = new Promise((resolve, reject) => {
@@ -193,21 +253,21 @@ processResponse = (res1, res2, res3, res4, res5, done) => {
         popularity.facebook = Number((fb * 100).toFixed(2));
 
         if (popularity.facebook) {
-          
+
           resolve();
         }
-      }else{ reject()}
+      } else { reject() }
 
-    }else{ reject()}
+    } else { reject() }
 
-  }).catch(()=>{ });
+  }).catch(() => { });
 
   Promise.all([promise1, promise2, promise3, promise4, promise5])
     .then(() => {
 
-      popularity.overall = (Object.values(popularity).reduce((a,b) => a+b, 0))/count;
-      popularity.overall= Number(popularity.overall.toFixed(2))+"%";
-     
+      popularity.overall = (Object.values(popularity).reduce((a, b) => a + b, 0)) / count;
+      popularity.overall = Number(popularity.overall.toFixed(2)) + "%";
+
       console.log("we are done " + JSON.stringify(popularity));
 
       done({ result, popularity });
