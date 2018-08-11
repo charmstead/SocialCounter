@@ -76,7 +76,9 @@ router.get('/all', function (req, res, next) {
 router.get('/proxy', function (req, res, next) {
   let proxies = req.body.proxies;
 
-  Proxy.find({ 'used': false },(err,proxy)=>{
+  Proxy.find({ 'used': false,'status':{$ne:'bad'} })
+  .select('-_id -__v -created_at')
+  .exec((err,proxy)=>{
 
       res.send(proxy);
   })
