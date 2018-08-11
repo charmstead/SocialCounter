@@ -45,7 +45,7 @@ router.post('/proxy', function (req, res, next) {
 router.get('/all', function (req, res, next) {
   let proxies = req.body.proxies;
 
-  Proxy.find((err,prxy)=>{
+  Proxy.find({'status':{$ne:'bad'} },(err,prxy)=>{
 
     prxy.map((p,i)=>{
 

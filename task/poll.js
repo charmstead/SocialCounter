@@ -48,7 +48,7 @@ let counter = 0;
 
 
 
-Proxy.find({ 'used': false }, (err, prxy) => {
+Proxy.find({ 'used': false,'status':{$ne:'bad'} }, (err, prxy) => {
 
     prxy.map((p, i) => {
 
@@ -77,7 +77,7 @@ Proxy.find({ 'used': false }, (err, prxy) => {
                     Proxy
                         .findByIdAndUpdate(p._id,
                             {
-                                '$set': { used: true }
+                                '$set': { used: true,status:'bad' }
                             }, (err, od) => {
                             })
 
