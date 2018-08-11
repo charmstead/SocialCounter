@@ -35,55 +35,55 @@ let counter = 0;
 // });
 
 
-try {
+// try {
 
-    Proxy.insertMany(proxies, (err, result) => {
+//     Proxy.insertMany(proxies, (err, result) => {
 
-      console.log("Successfully added proxies")
-    })
-  }
-  catch (e) {
-     console.log("Error occurred")
-  }
-
-
-
-// Proxy.find({ 'used': false,'status':{$ne:'bad'} }, (err, prxy) => {
-
-//     prxy.map((p, i) => {
-
-//         setTimeout(() => {
-//             console.log(i)
-
-//             let proxy_address = p.proxy.split(":");
-//             let proxy = { host: proxy_address[0], port: proxy_address[1] }
-//             options.proxy = proxy;
-//             console.log(proxy)
-//             axios(options)
-//                 .then(res => {
-//                     console.log(res)
-//                     if (res.data.length < 2) {
-//                         Proxy
-//                             .findByIdAndUpdate(p._id,
-//                                 {
-//                                     '$set': { used: true }
-//                                 }, (err, od) => {
-//                                 })
-//                     }
-//                 })
-//                 .catch(error => {
-//                     console.log("error");
-
-//                     Proxy
-//                         .findByIdAndUpdate(p._id,
-//                             {
-//                                 '$set': { used: true,status:'bad' }
-//                             }, (err, od) => {
-//                             })
-
-//                 });
-
-//         }, i * 2000)
+//       console.log("Successfully added proxies")
 //     })
+//   }
+//   catch (e) {
+//      console.log("Error occurred")
+//   }
 
-// })
+
+
+Proxy.find({ 'used': false,'status':{$ne:'bad'} }, (err, prxy) => {
+
+    prxy.map((p, i) => {
+
+        setTimeout(() => {
+            console.log(i)
+
+            let proxy_address = p.proxy.split(":");
+            let proxy = { host: proxy_address[0], port: proxy_address[1] }
+            options.proxy = proxy;
+            console.log(proxy)
+            axios(options)
+                .then(res => {
+                    console.log(res)
+                    if (res.data.length < 2) {
+                        Proxy
+                            .findByIdAndUpdate(p._id,
+                                {
+                                    '$set': { used: true }
+                                }, (err, od) => {
+                                })
+                    }
+                })
+                .catch(error => {
+                    console.log("error");
+
+                    Proxy
+                        .findByIdAndUpdate(p._id,
+                            {
+                                '$set': { used: true,status:'bad' }
+                            }, (err, od) => {
+                            })
+
+                });
+
+        }, i * 2000)
+    })
+
+})
