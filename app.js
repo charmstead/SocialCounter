@@ -14,13 +14,13 @@ var app = express();
 
 
 // connecting to mongoose
-// if(process.env.PROD_ENV){
+if(process.env.PROD_ENV){
 
-//   mongoose.connect("mongodb://localhost:27017/igscrape");
-// }
-// else{
+  mongoose.connect("mongodb://localhost:27017/igscrape");
+}
+else{
  mongoose.connect('mongodb://clickfunnel:Klick_5@ds117691.mlab.com:17691/clickfunnel');
-// }
+}
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
